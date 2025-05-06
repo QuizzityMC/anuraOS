@@ -8,15 +8,22 @@ class Networking {
 	WebSocket: typeof WebSocket;
 	Socket: any;
 	TLSSocket: any;
+	bus: WispBus;
+	WSProxyEmulation: any;
 	constructor(wisp_server: string) {
+		this.bus = new WispBus(new WebSocket(wisp_server));
+		this.WSProxyEmulation = this.bus.getFakeWSProxySocket();
+
 		//@ts-ignore
-		import(this.libcurl_src).then((m) => {
+		import(this.libcurl_src).then(async (m) => {
 			this.libcurl = m.libcurl;
 			this.libcurl.load_wasm(this.libcurl_wasm);
+			this.libcurl.transport = this.bus.getFakeWSProxySocket();
 		});
 		document.addEventListener("libcurl_load", () => {
 			this.libcurl.set_websocket(wisp_server);
 			this.external.fetch = this.libcurl.fetch;
+
 			Object.assign(this, {
 				WebSocket: this.libcurl.WebSocket,
 				Socket: this.libcurl.WispConnection,

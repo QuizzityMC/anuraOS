@@ -3,7 +3,7 @@ type WallpaperObject = {
 	url: string;
 };
 
-class WallpaperSelector extends App {
+class WallpaperAndStyle extends App {
 	name = "Wallpaper & Style";
 	package = "anura.wallpaper";
 	icon = "/assets/icons/wallpaper.png";
@@ -85,7 +85,7 @@ class WallpaperSelector extends App {
 			margin-left: 20px;
 			text-align: center;
 			overflow-y: auto;
-			flex-grow: 1;
+			height: calc(100% - 250px);
 		}
 		.wallpaper-list-item {
 			cursor: pointer;
@@ -438,7 +438,7 @@ class WallpaperSelector extends App {
 			</div>
 			{$if(
 				use(this.state.tab, (tab) => tab === "wallpapers"),
-				<div style="display: flex; flex-direction: column; height: 100%;">
+				<div style="flex-direction: column; height: 100%;">
 					<div class="current-wallpaper">
 						<img
 							class="current-wallpaper-image"
